@@ -1,4 +1,4 @@
-# homebrew-tools
+# homebrew-keg
 
 Homebrew formula for installing jkassis's apps & tools.
 
@@ -7,7 +7,7 @@ Homebrew formula for installing jkassis's apps & tools.
 Add repository:
 
 ```
-brew tap jkassis/tap
+brew tap jkassis/keg
 ```
 
 Install [gitall](https://github.com/jkassis/gitall):
