@@ -9,15 +9,3 @@ Add repository:
 ```
 brew tap jkassis/keg
 ```
-
-Install [gitall](https://github.com/jkassis/gitall):
-
-```
-brew install gitall
-```
-
-Upgrade the gitall CLI to the latest version:
-
-```
-brew upgrade gitall
-```
