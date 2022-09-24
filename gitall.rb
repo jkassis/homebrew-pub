@@ -5,20 +5,20 @@
 class Gitall < Formula
   desc ""
   homepage "https://github.com/jkassis/homebrew-keg"
-  version "0.5.19"
+  version "0.6.1"
 
   on_macos do
-    if Hardware::CPU.arm?
-      url "https://github.com/jkassis/gitall/releases/download/v0.5.19/gitall_0.5.19_darwin_arm64.tar.gz"
-      sha256 "c42182da5f9c1ff9aed72459315bbb2aa71caf1be1d37e46e03d0d4f95a8e86e"
+    if Hardware::CPU.intel?
+      url "https://github.com/jkassis/gitall/releases/download/v0.6.1/gitall_0.6.1_darwin_amd64.tar.gz"
+      sha256 "2d6567a53726efa84c9ec53e07aad915621f94afd67b2636199fd075bf33c0aa"
 
       def install
         bin.install "gitall"
       end
     end
-    if Hardware::CPU.intel?
-      url "https://github.com/jkassis/gitall/releases/download/v0.5.19/gitall_0.5.19_darwin_amd64.tar.gz"
-      sha256 "7c7fe69e48bb552640c36207222c0f2f10a8cc6b177b1f0ec296c06f13e0143c"
+    if Hardware::CPU.arm?
+      url "https://github.com/jkassis/gitall/releases/download/v0.6.1/gitall_0.6.1_darwin_arm64.tar.gz"
+      sha256 "c641a36a24762c5b41adf9c01a6e5238aa0a3e265650ce2db395992becfb5892"
 
       def install
         bin.install "gitall"
@@ -28,16 +28,16 @@ class Gitall < Formula
 
   on_linux do
     if Hardware::CPU.arm? && Hardware::CPU.is_64_bit?
-      url "https://github.com/jkassis/gitall/releases/download/v0.5.19/gitall_0.5.19_linux_arm64.tar.gz"
-      sha256 "2e90812367e8e92dcb5595c37cdf015bbf9376cfb237fc3a263fed2102dc550c"
+      url "https://github.com/jkassis/gitall/releases/download/v0.6.1/gitall_0.6.1_linux_arm64.tar.gz"
+      sha256 "4b4a6e6c6b2c35e8c274c27a4a203a1ffd3fc8b2aa94b2eb76d32730a25c481b"
 
       def install
         bin.install "gitall"
       end
     end
     if Hardware::CPU.intel?
-      url "https://github.com/jkassis/gitall/releases/download/v0.5.19/gitall_0.5.19_linux_amd64.tar.gz"
-      sha256 "3b794b91d893387c475faf88abab89c5f50e9e94cb3bf5cccf7e97918c9c3de9"
+      url "https://github.com/jkassis/gitall/releases/download/v0.6.1/gitall_0.6.1_linux_amd64.tar.gz"
+      sha256 "8dff470a3661c2fbb953048bdcf871a1bcee13d35482962918bba2b9edb237f0"
 
       def install
         bin.install "gitall"
