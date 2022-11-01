@@ -5,20 +5,20 @@
 class Jerriedr < Formula
   desc ""
   homepage "https://github.com/jkassis/homebrew-keg"
-  version "0.2.11"
+  version "0.2.12"
 
   on_macos do
-    if Hardware::CPU.arm?
-      url "https://github.com/jkassis/jerriedr/releases/download/v0.2.11/jerriedr_0.2.11_darwin_arm64.tar.gz"
-      sha256 "0e05bc6e1d9ae9b98edfd9ecf292127737c4533690bb17f8cad749d528b8e8ea"
+    if Hardware::CPU.intel?
+      url "https://github.com/jkassis/jerriedr/releases/download/v0.2.12/jerriedr_0.2.12_darwin_amd64.tar.gz"
+      sha256 "6cc8e686888238b44fc79d1ea784e5fa4ecd79dbb584b0dfe55dd995bb2dd483"
 
       def install
         bin.install "jerriedr"
       end
     end
-    if Hardware::CPU.intel?
-      url "https://github.com/jkassis/jerriedr/releases/download/v0.2.11/jerriedr_0.2.11_darwin_amd64.tar.gz"
-      sha256 "742425a6312668dceccfa5f4e427a46b1321c04d645bdb4d3dc695c5a99cc69e"
+    if Hardware::CPU.arm?
+      url "https://github.com/jkassis/jerriedr/releases/download/v0.2.12/jerriedr_0.2.12_darwin_arm64.tar.gz"
+      sha256 "33df0e5cd7443c408de0b6695544ace03d1b10276cf00f3fa4a142d8d7f60915"
 
       def install
         bin.install "jerriedr"
@@ -28,16 +28,16 @@ class Jerriedr < Formula
 
   on_linux do
     if Hardware::CPU.arm? && Hardware::CPU.is_64_bit?
-      url "https://github.com/jkassis/jerriedr/releases/download/v0.2.11/jerriedr_0.2.11_linux_arm64.tar.gz"
-      sha256 "ac389d49a613903d2e33d46b6761ae96aa0139c8b3e2e4da06fd9be8af2a8e26"
+      url "https://github.com/jkassis/jerriedr/releases/download/v0.2.12/jerriedr_0.2.12_linux_arm64.tar.gz"
+      sha256 "725b951396cd2bdbc3239218d53a49f21de1db35b9bd780e1246d323b874d33d"
 
       def install
         bin.install "jerriedr"
       end
     end
     if Hardware::CPU.intel?
-      url "https://github.com/jkassis/jerriedr/releases/download/v0.2.11/jerriedr_0.2.11_linux_amd64.tar.gz"
-      sha256 "30e99da65288c41bb7ee9d725cab7613f68400d615d4cad4bf95a3105202b5f8"
+      url "https://github.com/jkassis/jerriedr/releases/download/v0.2.12/jerriedr_0.2.12_linux_amd64.tar.gz"
+      sha256 "2cf09626a2bd40d020e7d9ad47d5b9071144da033de29ab782aed4dac8f11ce7"
 
       def install
         bin.install "jerriedr"
