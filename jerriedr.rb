@@ -5,20 +5,20 @@
 class Jerriedr < Formula
   desc ""
   homepage "https://github.com/jkassis/homebrew-keg"
-  version "0.2.12"
+  version "0.2.13"
 
   on_macos do
     if Hardware::CPU.intel?
-      url "https://github.com/jkassis/jerriedr/releases/download/v0.2.12/jerriedr_0.2.12_darwin_amd64.tar.gz"
-      sha256 "6cc8e686888238b44fc79d1ea784e5fa4ecd79dbb584b0dfe55dd995bb2dd483"
+      url "https://github.com/jkassis/jerriedr/releases/download/v0.2.13/jerriedr_0.2.13_darwin_amd64.tar.gz"
+      sha256 "9e4622472f052eb3041d21d85a0cb60d4ef0f8a5802e3e3175ef40be495d668f"
 
       def install
         bin.install "jerriedr"
       end
     end
     if Hardware::CPU.arm?
-      url "https://github.com/jkassis/jerriedr/releases/download/v0.2.12/jerriedr_0.2.12_darwin_arm64.tar.gz"
-      sha256 "33df0e5cd7443c408de0b6695544ace03d1b10276cf00f3fa4a142d8d7f60915"
+      url "https://github.com/jkassis/jerriedr/releases/download/v0.2.13/jerriedr_0.2.13_darwin_arm64.tar.gz"
+      sha256 "08d9f05f36ec0bb865ec0a706140d4e321526f29e8b71f84f26772fb45e39810"
 
       def install
         bin.install "jerriedr"
@@ -28,16 +28,16 @@ class Jerriedr < Formula
 
   on_linux do
     if Hardware::CPU.arm? && Hardware::CPU.is_64_bit?
-      url "https://github.com/jkassis/jerriedr/releases/download/v0.2.12/jerriedr_0.2.12_linux_arm64.tar.gz"
-      sha256 "725b951396cd2bdbc3239218d53a49f21de1db35b9bd780e1246d323b874d33d"
+      url "https://github.com/jkassis/jerriedr/releases/download/v0.2.13/jerriedr_0.2.13_linux_arm64.tar.gz"
+      sha256 "749edf387827aaac7d5688ae8aeaf32f86c8686a63b5641b4d9cc6c415ebe5fe"
 
       def install
         bin.install "jerriedr"
       end
     end
     if Hardware::CPU.intel?
-      url "https://github.com/jkassis/jerriedr/releases/download/v0.2.12/jerriedr_0.2.12_linux_amd64.tar.gz"
-      sha256 "2cf09626a2bd40d020e7d9ad47d5b9071144da033de29ab782aed4dac8f11ce7"
+      url "https://github.com/jkassis/jerriedr/releases/download/v0.2.13/jerriedr_0.2.13_linux_amd64.tar.gz"
+      sha256 "94ed9a48993fb9e71dd24413f734e2b5218ce3ecf7d8943c93240dd119ccd8b9"
 
       def install
         bin.install "jerriedr"
