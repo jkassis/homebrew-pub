@@ -12,7 +12,7 @@ brew tap jkassis/homebrew-keg
 
 <!-- project_table_start -->
 TABLE HERE
-<!--project_table_end -->
+<!-- project_table_end -->
 
 ## Contributing
 
