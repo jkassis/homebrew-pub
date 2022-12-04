@@ -9,7 +9,7 @@ class Gitall < Formula
 
   on_macos do
     if Hardware::CPU.arm?
-      url "https://github.com/jkassis/gitall/releases/download/v0.6.13/gitall_0.6.13_darwin_arm64.tar.gz"
+      url "https://github.com/jkassis/gitall/releases/download/v0.7.40/gitall-0.7.40-darwin-arm64.tar.gz"
       sha256 "db5932916208a7a9aba639e174affbaeec4a41fc8b9dc59b30ab361be541027e"
 
       def install
@@ -17,7 +17,7 @@ class Gitall < Formula
       end
     end
     if Hardware::CPU.intel?
-      url "https://github.com/jkassis/gitall/releases/download/v0.6.13/gitall_0.6.13_darwin_amd64.tar.gz"
+      url "https://github.com/jkassis/gitall/releases/download/v0.7.40/gitall-0.7.40-darwin-amd64.tar.gz"
       sha256 "54693a7cd281ba4b6131336f86dc16f557484ace0ff056c9e5f3f935018d5a20"
 
       def install
@@ -28,7 +28,7 @@ class Gitall < Formula
 
   on_linux do
     if Hardware::CPU.arm? && Hardware::CPU.is_64_bit?
-      url "https://github.com/jkassis/gitall/releases/download/v0.6.13/gitall_0.6.13_linux_arm64.tar.gz"
+      url "https://github.com/jkassis/gitall/releases/download/v0.7.40/gitall-0.7.40-linux-arm64.tar.gz"
       sha256 "3b974273e222114bb53dd82ee2bb3a5af6aade41a247eab90b0220de7f64af2f"
 
       def install
@@ -36,7 +36,7 @@ class Gitall < Formula
       end
     end
     if Hardware::CPU.intel?
-      url "https://github.com/jkassis/gitall/releases/download/v0.6.13/gitall_0.6.13_linux_amd64.tar.gz"
+      url "https://github.com/jkassis/gitall/releases/download/v0.7.40/gitall-0.7.40-linux-amd64.tar.gz"
       sha256 "ba7c3c1111f6996ccc05e5c0ba412e62b0c9c8d70819cbe3f7178e512e9d36d5"
 
       def install
