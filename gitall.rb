@@ -18,7 +18,7 @@ class Gitall < Formula
     end
     if Hardware::CPU.intel?
       url "https://github.com/jkassis/gitall/releases/download/v0.7.40/gitall-0.7.40-darwin-amd64.tar.gz"
-      sha256 "54693a7cd281ba4b6131336f86dc16f557484ace0ff056c9e5f3f935018d5a20"
+      sha256 "ae10e9e7bb7ef2f093f46fec8e0ece33f7fe9f5cec24280eefa54e85702add4b"
 
       def install
         bin.install "gitall"
