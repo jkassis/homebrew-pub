@@ -13,7 +13,7 @@ class Gitall < Formula
       sha256 "db5932916208a7a9aba639e174affbaeec4a41fc8b9dc59b30ab361be541027e"
 
       def install
-        bin.install "home/runner/work/gitall/gitall/build/gitall-0.7.40-darwin-arm64" => "gitall"
+        bin.install "home/runner/work/gitall/gitall/build/gitall-0.7.40-darwin-arm64"
       end
     end
     if Hardware::CPU.intel?
@@ -21,7 +21,7 @@ class Gitall < Formula
       sha256 "ae10e9e7bb7ef2f093f46fec8e0ece33f7fe9f5cec24280eefa54e85702add4b"
 
       def install
-        bin.install "home/runner/work/gitall/gitall/build/gitall-0.7.40-darwin-amd64" => "gitall"
+        bin.install "home/runner/work/gitall/gitall/build/gitall-0.7.40-darwin-amd64"
       end
     end
   end
