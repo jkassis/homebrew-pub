@@ -1,11 +1,11 @@
 # homebrew-jkassis
 
-Homebrew formula for installing jkassis's apps & tools.
+Homebrew formula for installing jkassis's publicly available apps & tools.
 
 ## Install
 
 ```
-brew tap jkassis/homebrew-keg
+brew tap jkassis/homebrew-pub
 ```
 
 ## Package index
