@@ -1,11 +1,11 @@
-# homebrew-jkassis
+# github.com/jkassis/homebrew-pub
 
 Homebrew formula for installing jkassis's publicly available apps & tools.
 
 ## Install
 
 ```
-brew tap jkassis/homebrew-pub
+brew tap jkassis/pub
 ```
 
 ## Package index
