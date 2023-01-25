@@ -16,8 +16,7 @@ class GITALL < Formula
       def install
         bin.install "gitall-darwin-10.10-amd64" => "gitall"
       end
-    end
-	if Hardware::CPU.arm? && Hardware::CPU.is_64_bit?
+    endif Hardware::CPU.arm? && Hardware::CPU.is_64_bit?
 
       url "https://github.com/jkassis/gitall/releases/download/v0.8.10/gitall-darwin-10.10-arm64.tar.gz"
       sha256 "15e1dbbdcfc0da93657ddd647591db15e13083f1804adfd81b7daae97c012a50"
@@ -26,7 +25,7 @@ class GITALL < Formula
         bin.install "gitall-darwin-10.10-arm64" => "gitall"
       end
     end
-	end
+  end
 
   on_linux do
 	  if Hardware::CPU.intel? && Hardware::CPU.is_64_bit?
@@ -37,8 +36,7 @@ class GITALL < Formula
       def install
         bin.install "gitall-linux-amd64" => "gitall"
       end
-    end
-	if Hardware::CPU.arm? && Hardware::CPU.is_64_bit?
+    endif Hardware::CPU.arm? && Hardware::CPU.is_64_bit?
 
       url "https://github.com/jkassis/gitall/releases/download/v0.8.10/gitall-linux-arm64.tar.gz"
       sha256 "909ddc76d551269c4982e92704b9325a33987ac13acc142cca9e26fd8b05636f"
@@ -47,7 +45,7 @@ class GITALL < Formula
         bin.install "gitall-linux-arm64" => "gitall"
       end
     end
-	end
+  end
 
   on_windows do
 	  if Hardware::CPU.intel? && Hardware::CPU.is_64_bit?
@@ -59,5 +57,5 @@ class GITALL < Formula
         bin.install "gitall-windows-4.0-amd64.exe" => "gitall"
       end
     end
-	end
+  end
 end
