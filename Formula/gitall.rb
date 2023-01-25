@@ -50,17 +50,4 @@ class Gitall < Formula
     end
 
   end
-
-  on_windows do
-
-    if Hardware::CPU.intel? && Hardware::CPU.is_64_bit?
-      url "https://github.com/jkassis/gitall/releases/download/v0.8.10/gitall-windows-4.0-amd64.exe.tar.gz"
-      sha256 "a08cf6ca241dafa15b09e51c80541afd8a6eb2b1ca5aeea3b8fb505960e7124c"
-
-      def install
-        bin.install "gitall-windows-4.0-amd64.exe" => "gitall"
-      end
-    end
-
-  end
 end
