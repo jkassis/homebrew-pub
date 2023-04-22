@@ -1,11 +1,13 @@
-jkassis homebrew-pub
-====================
+jkassis/dist.brew.pub
+=====================
 Homebrew tap for jkassis's publicly distributed apps & tools.
 
 ## Install
 
+One of these...
 ```
-brew tap jkassis/pub
+brew tap jkassis/pub ssh://git@github.com/jkassis/dist.brew.pub
+brew tap jkassis/pub https://github.com/jkassis/dist.brew.pub
 ```
 
 ## Packages
