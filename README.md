@@ -1,6 +1,6 @@
-# github.com/jkassis/homebrew-pub
-
-Homebrew formula for installing jkassis's publicly available apps & tools.
+jkassis homebrew-pub
+====================
+Homebrew tap for jkassis's publicly distributed apps & tools.
 
 ## Install
 
@@ -8,18 +8,18 @@ Homebrew formula for installing jkassis's publicly available apps & tools.
 brew tap jkassis/pub
 ```
 
-## Package index
+## Packages
 
-<!-- project_table_start -->
-TABLE HERE
-<!-- project_table_end -->
+gitall: cli for performing git operations to multiple repos at once.
+jerriedr: cli for performing maintenance operations on the jerrie database.
+
 
 ## Contributing
 
 1. Fork it
-2. Create your feature branch (`git checkout -b my-new-feature`)
-3. Commit your changes (`git commit -am 'Add some feature'`)
-4. Push to the branch (`git push origin my-new-feature`)
-5. Create new Pull Request
+1. Create your feature branch (`git checkout -b my-new-feature`)
+1. Commit your changes (`git commit -am 'Add some feature'`)
+1. Push to the branch (`git push origin my-new-feature`)
+1. Create new Pull Request
 
 
