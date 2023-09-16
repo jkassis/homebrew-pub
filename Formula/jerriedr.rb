@@ -14,7 +14,7 @@
         bin.install Dir["*"]
       end
     end
-%!(EXTRA string=jerriedr)
+
     if Hardware::CPU.arm? && Hardware::CPU.is_64_bit?
       url "https://github.com/jkassis/jerriedr/releases/download/v0.2.14/jerriedr_0.2.14_darwin_arm64.tar.gz"
       sha256 "e809aa90d807585f1ccb53f40d33c481850693cc581adf452158f0fdaa5fe2f6"
@@ -23,7 +23,7 @@
         bin.install Dir["*"]
       end
     end
-%!(EXTRA string=jerriedr)
+
   end
 
   on_linux do
@@ -36,7 +36,7 @@
         bin.install Dir["*"]
       end
     end
-%!(EXTRA string=jerriedr)
+
     if Hardware::CPU.arm? && Hardware::CPU.is_64_bit?
       url "https://github.com/jkassis/jerriedr/releases/download/v0.2.14/jerriedr_0.2.14_linux_arm64.tar.gz"
       sha256 "0df7b883237e9b7cef96145b9fb76d8d5ad3c3d786a9d6eb357a746baba07ecb"
@@ -45,6 +45,6 @@
         bin.install Dir["*"]
       end
     end
-%!(EXTRA string=jerriedr)
+
   end
 end
