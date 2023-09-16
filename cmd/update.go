@@ -141,8 +141,8 @@ func writeFormulaEntry(f *os.File, rbCond string, cond func(common.AssetName) bo
 		if cond(common.AssetName(asset.GetBrowserDownloadURL())) {
 			fileStuff := `
     if %s
-      url: "%s"
-      sha256: "%s"
+      url "%s"
+      sha256 "%s"
 
       def install
         bin.install "%s" => "%s"
