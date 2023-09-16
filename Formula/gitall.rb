@@ -21,7 +21,7 @@
 
       def install
         libexec.install Dir["*"]
-        bin.write_exec_script libexec/"usr/bin/gitall"
+        bin.write_exec_script libexec/"bin/gitall"
       end
     end
 
