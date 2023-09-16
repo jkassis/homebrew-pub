@@ -21,6 +21,8 @@
       sha256 "4fe94e4b010790987e277e224285109d074c5372c4ecb7038db8b5a2df5d84e6"
 
       def install
+			  libexec.install Dir[""]
+				bin.write_exec_script libexec/"bin/gitall"
       end
     end
 
