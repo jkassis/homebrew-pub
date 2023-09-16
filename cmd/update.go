@@ -153,8 +153,8 @@ func writeFormulaEntry(f *os.File, rbCond string, cond func(common.AssetName) bo
       end
     end
 `
-			packageName := common.AssetName(*asset.Name).PackageName()
-			f.WriteString(fmt.Sprintf(fileStuff, rbCond, asset.GetBrowserDownloadURL(), common.URLToSha(asset.GetBrowserDownloadURL()), packageName, formula.Name))
+			// packageName := common.AssetName(*asset.Name).PackageName()
+			f.WriteString(fmt.Sprintf(fileStuff, rbCond, asset.GetBrowserDownloadURL(), common.URLToSha(asset.GetBrowserDownloadURL()), "/usr/bin/"+formula.Name, formula.Name))
 		}
 	}
 }
