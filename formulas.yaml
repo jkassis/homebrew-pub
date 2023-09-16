@@ -1,0 +1,9 @@
+formulas:
+- name: gitall
+  owner: jkassis
+  repo: gitall
+  homepage: https://github.com/jkassis/gitall
+- name: jerriedr
+  owner: jkassis
+  repo: jerriedr
+  homepage: https://github.com/jkassis/jerriedr
