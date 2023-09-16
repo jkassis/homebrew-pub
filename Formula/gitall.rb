@@ -20,7 +20,7 @@
       sha256 "1b1e952190d227fa4806ca90769f91c6251fbdb1dad50202b27a0415f66c6fd0"
 
       def install
-        bin.install "/usr/bin/gitall" => "gitall"
+        bin.install "usr/bin/gitall" => "gitall"
       end
     end
 
