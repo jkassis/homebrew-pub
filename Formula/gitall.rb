@@ -11,7 +11,7 @@
       sha256 "569d3f8c7d04b9ffd6abc878076b78f1f1ed30f62fbe43585e3028f428bf8210"
 
       def install
-        bin.install "/usr/bin/gitall" => "gitall"
+        bin.install "./usr/bin/gitall" => "gitall"
       end
     end
 
@@ -20,7 +20,7 @@
       sha256 "1b1e952190d227fa4806ca90769f91c6251fbdb1dad50202b27a0415f66c6fd0"
 
       def install
-        bin.install "/usr/bin/gitall" => "gitall"
+        bin.install "./usr/bin/gitall" => "gitall"
       end
     end
 
@@ -33,7 +33,7 @@
       sha256 "78814a29b632616213b99b1cded04a05a99e72b09ff841ca333050144f6be456"
 
       def install
-        bin.install "/usr/bin/gitall" => "gitall"
+        bin.install "./usr/bin/gitall" => "gitall"
       end
     end
 
@@ -42,7 +42,7 @@
       sha256 "b6dee5d01f3f95459e293e76480a655403f65cdbfeccc039acd29106af5e9bfe"
 
       def install
-        bin.install "/usr/bin/gitall" => "gitall"
+        bin.install "./usr/bin/gitall" => "gitall"
       end
     end
 
@@ -51,7 +51,7 @@
       sha256 "49340f6cbb0f40ad35e7e026098010c8281783d5ff191c3283b46d4cae488b19"
 
       def install
-        bin.install "/usr/bin/gitall" => "gitall"
+        bin.install "./usr/bin/gitall" => "gitall"
       end
     end
 
@@ -60,7 +60,7 @@
       sha256 "deceace4663f4a20f7d23dd032f34b682432aa79d43dbd4d942c534d4c6fcf3b"
 
       def install
-        bin.install "/usr/bin/gitall" => "gitall"
+        bin.install "./usr/bin/gitall" => "gitall"
       end
     end
 
