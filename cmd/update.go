@@ -74,6 +74,7 @@ func doIt(cmd *cobra.Command) {
 	}
 }
 
+// See https://docs.brew.sh/Formula-Cookbook
 func writeFormula(formula *common.Formula, release *github.RepositoryRelease) {
 	file, err := os.Create(fmt.Sprintf("Formula/%s.rb", formula.Name))
 	if err != nil {
