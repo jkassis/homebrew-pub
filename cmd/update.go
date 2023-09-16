@@ -149,12 +149,13 @@ func writeFormulaEntry(f *os.File, rbCond string, cond func(common.AssetName) bo
       sha256 "%s"
 
       def install
-        bin.install "%s" => "%s"
+			  libexec.install Dir["/"]
+				bin.write_exec_script libexec/"bin/%s"
       end
     end
 `
 			// packageName := common.AssetName(*asset.Name).PackageName()
-			f.WriteString(fmt.Sprintf(fileStuff, rbCond, asset.GetBrowserDownloadURL(), common.URLToSha(asset.GetBrowserDownloadURL()), "/usr/bin/"+formula.Name, formula.Name))
+			f.WriteString(fmt.Sprintf(fileStuff, rbCond, asset.GetBrowserDownloadURL(), common.URLToSha(asset.GetBrowserDownloadURL()), formula.Name))
 		}
 	}
 }

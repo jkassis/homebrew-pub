@@ -11,7 +11,8 @@
       sha256 "2a3fc2722e930e08e2459fc7ea445b3f0848184b3d07c33bf726685b0dd55225"
 
       def install
-        bin.install "/usr/bin/jerriedr" => "jerriedr"
+			  libexec.install Dir["/"]
+				bin.write_exec_script libexec/"bin/jerriedr"
       end
     end
 
@@ -20,7 +21,8 @@
       sha256 "e809aa90d807585f1ccb53f40d33c481850693cc581adf452158f0fdaa5fe2f6"
 
       def install
-        bin.install "/usr/bin/jerriedr" => "jerriedr"
+			  libexec.install Dir["/"]
+				bin.write_exec_script libexec/"bin/jerriedr"
       end
     end
 
@@ -33,7 +35,8 @@
       sha256 "09f857139583cc09e28bf6742e6d061932a67a012033768852376425b6e3c3ec"
 
       def install
-        bin.install "/usr/bin/jerriedr" => "jerriedr"
+			  libexec.install Dir["/"]
+				bin.write_exec_script libexec/"bin/jerriedr"
       end
     end
 
@@ -42,7 +45,8 @@
       sha256 "0df7b883237e9b7cef96145b9fb76d8d5ad3c3d786a9d6eb357a746baba07ecb"
 
       def install
-        bin.install "/usr/bin/jerriedr" => "jerriedr"
+			  libexec.install Dir["/"]
+				bin.write_exec_script libexec/"bin/jerriedr"
       end
     end
 
