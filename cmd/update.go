@@ -62,11 +62,15 @@ func doIt(cmd *cobra.Command) {
 	formulas := common.GetFormulas("formulas.yaml")
 	for _, formula := range formulas {
 		// Get the releases for the formula
-		latestRelease, _, err := client.Repositories.GetLatestRelease(context.Background(), formula.Owner, formula.Repo)
+		release, _, err := client.Repositories.GetLatestRelease(context.Background(), formula.Owner, formula.Repo)
+		log.Infof("processing %s %s", formula.Name, *release.TagName)
+		for _, asset := range release.Assets {
+			log.Infof("   %s", asset.GetBrowserDownloadURL())
+		}
 		if err != nil {
 			log.Errorf("could not get latest release for %s: %v", formula.Name, err)
 		}
-		writeFormula(formula, latestRelease)
+		writeFormula(formula, release)
 	}
 }
 
