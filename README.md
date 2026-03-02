@@ -12,9 +12,8 @@ brew tap jkassis/pub https://github.com/jkassis/dist.brew.pub
 
 ## Packages
 
-gitall: cli for performing git operations to multiple repos at once.
-layou: a macos window layout manager
-jerriedr: cli for performing maintenance operations on the jerrie database.
+- gitall: cli for performing git operations to multiple repos at once.
+- layout: a macos window layout manager
 
 
 ## Contributing
