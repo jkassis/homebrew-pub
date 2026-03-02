@@ -1,15 +1,15 @@
 class Layout < Formula
   desc "macOS window layout manager with multi-space support and browser tab restore"
   homepage "https://github.com/jkassis/layout"
-  version "0.1.0"
+  version "0.1.1"
   license "MIT"
 
   depends_on :macos
 
   on_macos do
     if Hardware::CPU.arm?
-      url "https://github.com/jkassis/layout/releases/download/v0.1.0/layout-darwin-arm64-0.1.0.tar.gz"
-      sha256 "e19d388fc6e5697ccf400a262ede3c9b65017dc51664679581f86e52d1c53a5a"
+      url "https://github.com/jkassis/layout/releases/download/v0.1.1/layout-darwin-arm64-0.1.1.tar.gz"
+      sha256 "29121060bcfe5d7aed1de325f3ff22c8d7191b25a364bd7aca592a0fd40b56de"
     end
   end
 
