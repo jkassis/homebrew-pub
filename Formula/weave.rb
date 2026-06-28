@@ -5,13 +5,13 @@ class Weave < Formula
 
   on_macos do
     if Hardware::CPU.arm?
-      url "https://github.com/jkassis/homebrew-pub/releases/download/weave-v0.1.28/weave-darwin-arm64-0.1.28.tar.gz"
-      sha256 "c7d35abae55e12cabaa7d666de837c34dc205b240150e36efa936541d4d0425d"
+      url "https://github.com/jkassis/homebrew-pub/releases/download/weave-v0.1.29/weave-darwin-arm64-0.1.29.tar.gz"
+      sha256 "e423e9b46b018723f6a6ab39b901129a7d069af27cc10803e0859909ac56de2d"
     end
 
     if Hardware::CPU.intel?
-      url "https://github.com/jkassis/homebrew-pub/releases/download/weave-v0.1.28/weave-darwin-amd64-0.1.28.tar.gz"
-      sha256 "0ba9db424877621588ba5757fd928b44859a88330388465ad9c4c2a904079e96"
+      url "https://github.com/jkassis/homebrew-pub/releases/download/weave-v0.1.29/weave-darwin-amd64-0.1.29.tar.gz"
+      sha256 "385bccbda719723c45fbb3654df757008cee166f6827b70bec757c5fd4afdf3b"
     end
   end
 
