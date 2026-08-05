@@ -5,13 +5,13 @@ class Weave < Formula
 
   on_macos do
     if Hardware::CPU.arm?
-      url "https://github.com/jkassis/homebrew-pub/releases/download/weave-v0.1.36/weave-darwin-arm64-0.1.36.tar.gz"
-      sha256 "cc582a1cd0e7e6426842d85ad796ee73357c70ca3748bb69c8a6b16b64196309"
+      url "https://github.com/jkassis/homebrew-pub/releases/download/weave-v0.1.37/weave-darwin-arm64-0.1.37.tar.gz"
+      sha256 "bd3c8bf35aa82b0b46fb6709ef837dae6f06d357adfdc23521b378161fff0bc0"
     end
 
     if Hardware::CPU.intel?
-      url "https://github.com/jkassis/homebrew-pub/releases/download/weave-v0.1.36/weave-darwin-amd64-0.1.36.tar.gz"
-      sha256 "38092b0cea7c6f77329517d5365fb162ad9ef6cf21f7159abfb6c725f845d04b"
+      url "https://github.com/jkassis/homebrew-pub/releases/download/weave-v0.1.37/weave-darwin-amd64-0.1.37.tar.gz"
+      sha256 "7d7043bd1728304a2dc00f2e113a1798ed7765e63647b50f491e00816d77eac4"
     end
   end
 
@@ -20,6 +20,6 @@ class Weave < Formula
   end
 
   test do
-    assert_match "weave 0.1.36", shell_output("#{bin}/weave --version")
+    assert_match "weave 0.1.37", shell_output("#{bin}/weave --version")
   end
 end
