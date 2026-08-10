@@ -3,6 +3,8 @@ class Jarall < Formula
   homepage "https://github.com/jkassis/jarhead"
   version "0.1.0"
 
+  depends_on :macos
+
   on_macos do
     if Hardware::CPU.arm?
       url "https://github.com/jkassis/jarhead/releases/download/jarall-v0.1.0/jarall-darwin-arm64-0.1.0.tar.gz"
