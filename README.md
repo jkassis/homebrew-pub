@@ -17,6 +17,20 @@ brew tap jkassis/pub https://github.com/jkassis/dist.brew.pub
 - layout: a macos window layout manager
 - weave: local-first terminal and agent collaboration TUI.
 
+## JarHC releases
+
+Run the target-owned release entrypoint from a clean checkout after validating,
+tagging, and pushing an exact clean JarHead source revision:
+
+```sh
+./release-jarhc VERSION CLEAN_SOURCE_WORKTREE
+```
+
+The entrypoint builds both macOS architectures with a persistent local Cargo
+cache, publishes checksum-verified public assets, updates the formula, and
+pushes the formula commit. It omits the Claude SDK's bundled executable because
+JarHC passes the user's configured Claude executable to the SDK explicitly.
+
 
 ## Contributing
 

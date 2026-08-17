@@ -1,0 +1,21 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+formula, version, arm_sha, intel_sha = ARGV
+abort "usage: #{$PROGRAM_NAME} FORMULA VERSION ARM_SHA INTEL_SHA" unless intel_sha
+
+text = File.read(formula)
+arm = <<~BLOCK.chomp
+  url "https://github.com/jkassis/homebrew-pub/releases/download/jarhc-dist-v#{version}/jarhc-darwin-arm64-#{version}.tar.gz"
+        sha256 "#{arm_sha}"
+BLOCK
+intel = <<~BLOCK.chomp
+  url "https://github.com/jkassis/homebrew-pub/releases/download/jarhc-dist-v#{version}/jarhc-darwin-amd64-#{version}.tar.gz"
+        sha256 "#{intel_sha}"
+BLOCK
+
+abort "arm64 formula stanza not found" unless text.sub!(/url ".*jarhc-darwin-arm64-[^"]+"\n      sha256 "[a-f0-9]+"/, arm)
+abort "amd64 formula stanza not found" unless text.sub!(/url ".*jarhc-darwin-amd64-[^"]+"\n      sha256 "[a-f0-9]+"/, intel)
+abort "formula version assertion not found" unless text.sub!(/assert_match "jarhc [^"]+"/, "assert_match \"jarhc #{version}\"")
+
+File.write(formula, text)

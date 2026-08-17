@@ -1,0 +1,155 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+if [[ $# -ne 2 ]]; then
+  echo "usage: $0 VERSION CLEAN_SOURCE_WORKTREE" >&2
+  exit 2
+fi
+
+version="$1"
+source_root="$(cd "$2" && pwd)"
+target_root="$(cd "$(dirname "$0")" && pwd)"
+tag="jarhc-v${version}"
+public_tag="jarhc-dist-v${version}"
+source_repo="jkassis/jarhead"
+public_repo="jkassis/homebrew-pub"
+cache_root="$target_root/.release-cache"
+dist="$cache_root/dist-$version"
+bridge="$source_root/comps/jarhc/claude-sdk-bridge"
+formula="$target_root/Formula/jarhc.rb"
+started_at="$SECONDS"
+
+for tool in cargo gh jq node npm ruby shasum tar; do
+  command -v "$tool" >/dev/null || { echo "missing required tool: $tool" >&2; exit 1; }
+done
+
+test -z "$(git -C "$source_root" status --porcelain)" || {
+  echo "source worktree must be clean: $source_root" >&2
+  exit 1
+}
+test -z "$(git -C "$target_root" status --porcelain)" || {
+  echo "target worktree must be clean: $target_root" >&2
+  exit 1
+}
+
+source_revision="$(git -C "$source_root" rev-parse HEAD)"
+tag_revision="$(git -C "$source_root" rev-list -n 1 "$tag")"
+test "$source_revision" = "$tag_revision" || {
+  echo "$tag does not identify source HEAD $source_revision" >&2
+  exit 1
+}
+cargo_version="$(cargo metadata --manifest-path "$source_root/Cargo.toml" --no-deps --format-version 1 | jq -r '.packages[] | select(.name == "jarhc") | .version')"
+test "$version" = "$cargo_version" || {
+  echo "requested version $version does not match Cargo version $cargo_version" >&2
+  exit 1
+}
+
+if release="$(gh release view "$public_tag" --repo "$public_repo" --json isDraft 2>/dev/null)"; then
+  test "$(jq -r .isDraft <<<"$release")" = true || {
+    echo "public release already exists: $public_tag" >&2
+    exit 1
+  }
+else
+  gh release create "$public_tag" \
+    --repo "$public_repo" \
+    --target master \
+    --title "JarHC $version" \
+    --notes "Public Homebrew distribution assets for JarHC $version." \
+    --draft
+fi
+
+mkdir -p "$cache_root/npm" "$cache_root/target"
+find "$dist" -mindepth 1 -delete 2>/dev/null || true
+mkdir -p "$dist"
+
+NPM_CONFIG_CACHE="$cache_root/npm" npm ci --omit=optional --prefix "$bridge"
+
+build_target() {
+  local target="$1"
+  CARGO_TARGET_DIR="$cache_root/target" \
+    cargo build --manifest-path "$source_root/Cargo.toml" \
+      --locked --release -p jarhc --target "$target"
+}
+
+build_target aarch64-apple-darwin &
+arm_pid=$!
+build_target x86_64-apple-darwin &
+intel_pid=$!
+wait "$arm_pid"
+wait "$intel_pid"
+
+package_target() {
+  local target="$1"
+  local arch="$2"
+  local archive="$dist/jarhc-darwin-${arch}-${version}.tar.gz"
+  local staging
+  staging="$(mktemp -d)"
+  mkdir -p "$staging/bin" "$staging/libexec/jarhc/claude-sdk-bridge"
+  install -m 755 "$cache_root/target/$target/release/jarhc" "$staging/bin/jarhc"
+  cp "$bridge/bridge.mjs" "$bridge/protocol.mjs" "$bridge/package.json" \
+    "$bridge/package-lock.json" "$staging/libexec/jarhc/claude-sdk-bridge/"
+  cp -R "$bridge/node_modules" "$staging/libexec/jarhc/claude-sdk-bridge/"
+  COPYFILE_DISABLE=1 tar -C "$staging" -czf "$archive" bin libexec
+  shasum -a 256 "$archive" > "$archive.sha256"
+  find "$staging" -depth -delete
+}
+
+package_target aarch64-apple-darwin arm64 &
+arm_package_pid=$!
+package_target x86_64-apple-darwin amd64 &
+intel_package_pid=$!
+wait "$arm_package_pid"
+wait "$intel_package_pid"
+
+(
+  cd "$dist"
+  shasum -a 256 -c ./*.sha256
+)
+gh release upload "$public_tag" "$dist"/* --repo "$public_repo" --clobber
+
+verify="$cache_root/verify-$version"
+find "$verify" -mindepth 1 -delete 2>/dev/null || true
+mkdir -p "$verify"
+gh release download "$public_tag" --repo "$public_repo" \
+  --pattern "jarhc-darwin-arm64-${version}.tar.gz" \
+  --pattern "jarhc-darwin-arm64-${version}.tar.gz.sha256" \
+  --dir "$verify"
+gh release download "$public_tag" --repo "$public_repo" \
+  --pattern "jarhc-darwin-amd64-${version}.tar.gz" \
+  --pattern "jarhc-darwin-amd64-${version}.tar.gz.sha256" \
+  --dir "$verify"
+(
+  cd "$verify"
+  shasum -a 256 -c ./*.sha256
+)
+cmp "$dist/jarhc-darwin-arm64-${version}.tar.gz" "$verify/jarhc-darwin-arm64-${version}.tar.gz"
+cmp "$dist/jarhc-darwin-amd64-${version}.tar.gz" "$verify/jarhc-darwin-amd64-${version}.tar.gz"
+
+arm_sha="$(awk '{print $1}' "$dist/jarhc-darwin-arm64-${version}.tar.gz.sha256")"
+intel_sha="$(awk '{print $1}' "$dist/jarhc-darwin-amd64-${version}.tar.gz.sha256")"
+ruby "$target_root/update-jarhc-formula" \
+  "$formula" "$version" "$arm_sha" "$intel_sha"
+
+ruby -c "$formula"
+grep -F "jarhc-dist-v${version}" "$formula" >/dev/null
+grep -F "jarhc ${version}" "$formula" >/dev/null
+
+install_root="$(mktemp -d)"
+host_arch="$(uname -m)"
+case "$host_arch" in
+  arm64) host_archive="$dist/jarhc-darwin-arm64-${version}.tar.gz" ;;
+  x86_64) host_archive="$dist/jarhc-darwin-amd64-${version}.tar.gz" ;;
+  *) echo "unsupported release host: $host_arch" >&2; exit 1 ;;
+esac
+tar -C "$install_root" -xzf "$host_archive"
+test "$("$install_root/bin/jarhc" --version)" = "jarhc $version"
+find "$install_root" -depth -delete
+
+gh release edit "$public_tag" --repo "$public_repo" --draft=false
+git -C "$target_root" add Formula/jarhc.rb
+git -C "$target_root" diff --cached --check
+git -C "$target_root" commit -m "jarhc $version"
+git -C "$target_root" push origin HEAD:master
+
+elapsed="$((SECONDS - started_at))"
+echo "released JarHC $version from $source_revision in ${elapsed}s"
