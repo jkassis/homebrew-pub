@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
+export NO_COLOR=1
+unset CLICOLOR_FORCE FORCE_COLOR
 
 if [[ $# -ne 2 ]]; then
   echo "usage: $0 VERSION CLEAN_SOURCE_WORKTREE" >&2
@@ -44,8 +46,8 @@ test "$version" = "$cargo_version" || {
   exit 1
 }
 
-if release="$(gh release view "$public_tag" --repo "$public_repo" --json isDraft 2>/dev/null)"; then
-  test "$(jq -r .isDraft <<<"$release")" = true || {
+if is_draft="$(gh release view "$public_tag" --repo "$public_repo" --json isDraft --jq .isDraft 2>/dev/null)"; then
+  test "$is_draft" = true || {
     echo "public release already exists: $public_tag" >&2
     exit 1
   }
