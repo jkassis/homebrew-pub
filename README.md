@@ -13,6 +13,7 @@ brew tap jkassis/pub https://github.com/jkassis/dist.brew.pub
 ## Packages
 
 - gitall: cli for performing git operations to multiple repos at once.
+- jarhc: terminal client for native Codex and Claude agent runtimes.
 - layout: a macos window layout manager
 - weave: local-first terminal and agent collaboration TUI.
 
@@ -24,4 +25,3 @@ brew tap jkassis/pub https://github.com/jkassis/dist.brew.pub
 1. Commit your changes (`git commit -am 'Add some feature'`)
 1. Push to the branch (`git push origin my-new-feature`)
 1. Create new Pull Request
-
