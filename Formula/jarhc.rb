@@ -1,8 +1,6 @@
 class Jarhc < Formula
   desc "Terminal client for native Codex and Claude agent runtimes"
   homepage "https://github.com/jkassis/homebrew-pub"
-  version "0.1.3"
-
   depends_on "node"
 
   on_macos do
