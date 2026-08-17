@@ -22,6 +22,35 @@ bridge="$source_root/comps/jarhc/claude-sdk-bridge"
 formula="$target_root/Formula/jarhc.rb"
 started_at="$SECONDS"
 
+retry() {
+  local attempt
+  for attempt in 1 2 3 4; do
+    "$@" && return 0
+    if [[ "$attempt" -lt 4 ]]; then
+      sleep "$((attempt * 2))"
+    fi
+  done
+  return 1
+}
+
+release_draft_state() {
+  local attempt output
+  for attempt in 1 2 3 4; do
+    if output="$(gh release view "$public_tag" --repo "$public_repo" --json isDraft --jq .isDraft 2>&1)"; then
+      printf '%s\n' "$output"
+      return 0
+    fi
+    if grep -Fq "release not found" <<<"$output"; then
+      return 4
+    fi
+    if [[ "$attempt" -lt 4 ]]; then
+      sleep "$((attempt * 2))"
+    fi
+  done
+  printf '%s\n' "$output" >&2
+  return 1
+}
+
 for tool in cargo gh jq node npm ruby shasum tar; do
   command -v "$tool" >/dev/null || { echo "missing required tool: $tool" >&2; exit 1; }
 done
@@ -47,18 +76,24 @@ test "$version" = "$cargo_version" || {
   exit 1
 }
 
-if is_draft="$(gh release view "$public_tag" --repo "$public_repo" --json isDraft --jq .isDraft 2>/dev/null)"; then
+set +e
+is_draft="$(release_draft_state)"
+release_state_status=$?
+set -e
+if [[ "$release_state_status" -eq 0 ]]; then
   test "$is_draft" = true || {
     echo "public release already exists: $public_tag" >&2
     exit 1
   }
-else
-  gh release create "$public_tag" \
+elif [[ "$release_state_status" -eq 4 ]]; then
+  retry gh release create "$public_tag" \
     --repo "$public_repo" \
     --target master \
     --title "JarHC $version" \
     --notes "Public Homebrew distribution assets for JarHC $version." \
     --draft
+else
+  exit "$release_state_status"
 fi
 
 mkdir -p "$cache_root/npm" "$cache_root/target"
@@ -108,18 +143,20 @@ wait "$intel_package_pid"
   cd "$dist"
   shasum -a 256 -c ./*.sha256
 )
-gh release upload "$public_tag" "$dist"/* --repo "$public_repo" --clobber
+retry gh release upload "$public_tag" "$dist"/* --repo "$public_repo" --clobber
 
 verify="$cache_root/verify-$version"
 find "$verify" -mindepth 1 -delete 2>/dev/null || true
 mkdir -p "$verify"
-gh release download "$public_tag" --repo "$public_repo" \
+retry gh release download "$public_tag" --repo "$public_repo" \
   --pattern "jarhc-darwin-arm64-${version}.tar.gz" \
   --pattern "jarhc-darwin-arm64-${version}.tar.gz.sha256" \
+  --clobber \
   --dir "$verify"
-gh release download "$public_tag" --repo "$public_repo" \
+retry gh release download "$public_tag" --repo "$public_repo" \
   --pattern "jarhc-darwin-amd64-${version}.tar.gz" \
   --pattern "jarhc-darwin-amd64-${version}.tar.gz.sha256" \
+  --clobber \
   --dir "$verify"
 (
   cd "$verify"
@@ -148,7 +185,7 @@ tar -C "$install_root" -xzf "$host_archive"
 test "$("$install_root/bin/jarhc" --version)" = "jarhc $version"
 find "$install_root" -depth -delete
 
-gh release edit "$public_tag" --repo "$public_repo" --draft=false
+retry gh release edit "$public_tag" --repo "$public_repo" --draft=false
 git -C "$target_root" add Formula/jarhc.rb
 git -C "$target_root" diff --cached --check
 git -C "$target_root" commit -m "jarhc $version"
