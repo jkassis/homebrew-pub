@@ -5,13 +5,13 @@ class Jarhc < Formula
 
   on_macos do
     if Hardware::CPU.arm?
-      url "https://github.com/jkassis/homebrew-pub/releases/download/jarhc-dist-v0.1.12/jarhc-darwin-arm64-0.1.12.tar.gz"
-      sha256 "2fa4296199e3118be031034dcbf40a7da5fd6a8c5a6d2be7b449fb0590b10b27"
+      url "https://github.com/jkassis/homebrew-pub/releases/download/jarhc-dist-v0.1.13/jarhc-darwin-arm64-0.1.13.tar.gz"
+      sha256 "8cefe68506df8848b0732ad1a5245d74b09f31b430b6cb6e6dc38a206d04f677"
     end
 
     if Hardware::CPU.intel?
-      url "https://github.com/jkassis/homebrew-pub/releases/download/jarhc-dist-v0.1.12/jarhc-darwin-amd64-0.1.12.tar.gz"
-      sha256 "9239a06272e6e33ab5e5f3b73f78ca5a8e7078bac24b52f68deae8f299249167"
+      url "https://github.com/jkassis/homebrew-pub/releases/download/jarhc-dist-v0.1.13/jarhc-darwin-amd64-0.1.13.tar.gz"
+      sha256 "3b964c2593a7468045824cde11701d669ef994b992a3a9c51473429584abfe05"
     end
   end
 
@@ -21,6 +21,6 @@ class Jarhc < Formula
   end
 
   test do
-    assert_match "jarhc 0.1.12", shell_output("#{bin}/jarhc --version")
+    assert_match "jarhc 0.1.13", shell_output("#{bin}/jarhc --version")
   end
 end
