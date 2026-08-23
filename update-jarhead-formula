@@ -1,0 +1,36 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+formula, version, arm_sha, intel_sha = ARGV
+abort "usage: #{$PROGRAM_NAME} FORMULA VERSION ARM_SHA INTEL_SHA" unless intel_sha
+
+text = <<~RUBY
+  class Jarhead < Formula
+    desc "Terminal frontend for native Codex, Claude, and JarAgent runtimes"
+    homepage "https://github.com/jkassis/jarhead"
+    depends_on "node"
+
+    on_macos do
+      if Hardware::CPU.arm?
+        url "https://github.com/jkassis/homebrew-pub/releases/download/jarhead-dist-v#{version}/jarhead-darwin-arm64-#{version}.tar.gz"
+        sha256 "#{arm_sha}"
+      end
+
+      if Hardware::CPU.intel?
+        url "https://github.com/jkassis/homebrew-pub/releases/download/jarhead-dist-v#{version}/jarhead-darwin-amd64-#{version}.tar.gz"
+        sha256 "#{intel_sha}"
+      end
+    end
+
+    def install
+      bin.install "bin/jarhead"
+      libexec.install "libexec/jarhead"
+    end
+
+    test do
+      assert_match "jarhead #{version}", shell_output("\#{bin}/jarhead --version")
+    end
+  end
+RUBY
+
+File.write(formula, text)
