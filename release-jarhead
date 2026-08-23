@@ -169,6 +169,7 @@ arm_sha="$(awk '{print $1}' "$dist/jarhead-darwin-arm64-${version}.tar.gz.sha256
 intel_sha="$(awk '{print $1}' "$dist/jarhead-darwin-amd64-${version}.tar.gz.sha256")"
 ruby "$target_root/update-jarhead-formula" \
   "$formula" "$version" "$arm_sha" "$intel_sha"
+jq -n '{jarhc: "jarhead"}' > "$target_root/formula_renames.json"
 
 ruby -c "$formula"
 grep -F "jarhead-dist-v${version}" "$formula" >/dev/null
@@ -186,7 +187,8 @@ test "$("$install_root/bin/jarhead" --version)" = "jarhead $version"
 find "$install_root" -depth -delete
 
 retry gh release edit "$public_tag" --repo "$public_repo" --draft=false
-git -C "$target_root" add Formula/jarhead.rb
+git -C "$target_root" rm --ignore-unmatch Formula/jarhc.rb
+git -C "$target_root" add Formula/jarhead.rb formula_renames.json
 git -C "$target_root" diff --cached --check
 git -C "$target_root" commit -m "jarhead $version"
 git -C "$target_root" push origin HEAD:master
