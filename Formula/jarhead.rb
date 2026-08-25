@@ -5,13 +5,13 @@ class Jarhead < Formula
 
   on_macos do
     if Hardware::CPU.arm?
-      url "https://github.com/jkassis/homebrew-pub/releases/download/jarhead-dist-v0.1.25/jarhead-darwin-arm64-0.1.25.tar.gz"
-      sha256 "c8dcb3b9b9542749bcc0df853b725fcd5ab08dd38a85faea910b1af78e975946"
+      url "https://github.com/jkassis/homebrew-pub/releases/download/jarhead-dist-v0.1.26/jarhead-darwin-arm64-0.1.26.tar.gz"
+      sha256 "cabe8f08846f1dd1f1c5ab7840757c0981fd7d70b509011726e27bf7a224a96f"
     end
 
     if Hardware::CPU.intel?
-      url "https://github.com/jkassis/homebrew-pub/releases/download/jarhead-dist-v0.1.25/jarhead-darwin-amd64-0.1.25.tar.gz"
-      sha256 "2bd26b9f81cedca76ccb134af1f9ccd10d6a445aa8fcb6aafb9db5f9ec7f438b"
+      url "https://github.com/jkassis/homebrew-pub/releases/download/jarhead-dist-v0.1.26/jarhead-darwin-amd64-0.1.26.tar.gz"
+      sha256 "64e9e1871f7a960dc0818018bee57e5d89beac1e38e679c1c37369435f0d3066"
     end
   end
 
@@ -21,6 +21,6 @@ class Jarhead < Formula
   end
 
   test do
-    assert_match "jarhead 0.1.25", shell_output("#{bin}/jarhead --version")
+    assert_match "jarhead 0.1.26", shell_output("#{bin}/jarhead --version")
   end
 end
