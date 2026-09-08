@@ -1,6 +1,7 @@
 class Jarhead < Formula
   desc "Terminal frontend for native Codex, Claude, and JarAgent runtimes"
   homepage "https://github.com/jkassis/jarhead"
+  depends_on :macos
   depends_on "node"
 
   on_macos do

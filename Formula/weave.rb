@@ -2,6 +2,7 @@ class Weave < Formula
   desc "Local-first terminal and agent collaboration TUI"
   homepage "https://github.com/jkassis/homebrew-pub"
   license "MIT"
+  depends_on :macos
 
   on_macos do
     if Hardware::CPU.arm?
