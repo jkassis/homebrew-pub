@@ -5,13 +5,10 @@ class Layout < Formula
   license "MIT"
 
   depends_on :macos
+  depends_on arch: :arm64
 
-  on_macos do
-    if Hardware::CPU.arm?
-      url "https://github.com/jkassis/homebrew-pub/releases/download/layout-v0.1.2/layout-darwin-arm64-0.1.2.tar.gz"
-      sha256 "c175edb1d24fab974aa003da46065f006f3bbdf235ef280df1f0f80b56b13843"
-    end
-  end
+  url "https://github.com/jkassis/homebrew-pub/releases/download/layout-v0.1.2/layout-darwin-arm64-0.1.2.tar.gz"
+  sha256 "c175edb1d24fab974aa003da46065f006f3bbdf235ef280df1f0f80b56b13843"
 
   def install
     bin.install "layout"

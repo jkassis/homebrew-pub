@@ -11,16 +11,12 @@ text = <<~RUBY
     depends_on :macos
     depends_on "node"
 
-    on_macos do
-      if Hardware::CPU.arm?
-        url "https://github.com/jkassis/homebrew-pub/releases/download/jarhead-dist-v#{version}/jarhead-darwin-arm64-#{version}.tar.gz"
-        sha256 "#{arm_sha}"
-      end
-
-      if Hardware::CPU.intel?
-        url "https://github.com/jkassis/homebrew-pub/releases/download/jarhead-dist-v#{version}/jarhead-darwin-amd64-#{version}.tar.gz"
-        sha256 "#{intel_sha}"
-      end
+    if Hardware::CPU.arm?
+      url "https://github.com/jkassis/homebrew-pub/releases/download/jarhead-dist-v#{version}/jarhead-darwin-arm64-#{version}.tar.gz"
+      sha256 "#{arm_sha}"
+    else
+      url "https://github.com/jkassis/homebrew-pub/releases/download/jarhead-dist-v#{version}/jarhead-darwin-amd64-#{version}.tar.gz"
+      sha256 "#{intel_sha}"
     end
 
     def install
