@@ -132,7 +132,10 @@ package_target() {
     "$bridge/package-lock.json" "$staging/libexec/jarhead/claude-sdk-bridge/"
   cp -R "$bridge/node_modules" "$staging/libexec/jarhead/claude-sdk-bridge/"
   COPYFILE_DISABLE=1 tar -C "$staging" -czf "$archive" bin libexec
-  shasum -a 256 "$archive" > "$archive.sha256"
+  (
+    cd "$dist"
+    shasum -a 256 "$(basename "$archive")" > "$(basename "$archive").sha256"
+  )
   find "$staging" -depth -delete
 }
 
