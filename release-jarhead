@@ -100,7 +100,10 @@ mkdir -p "$cache_root/npm" "$cache_root/target"
 find "$dist" -mindepth 1 -delete 2>/dev/null || true
 mkdir -p "$dist"
 
-NPM_CONFIG_CACHE="$cache_root/npm" npm ci --omit=optional --prefix "$bridge"
+(
+  cd "$bridge"
+  NPM_CONFIG_CACHE="$cache_root/npm" npm ci --omit=optional
+)
 
 build_target() {
   local target="$1"
