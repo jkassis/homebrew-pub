@@ -17,6 +17,7 @@ public_tag="jarhead-dist-v${version}"
 source_repo="jkassis/jarhead"
 public_repo="jkassis/homebrew-pub"
 cache_root="$git_common_dir/jarhead-release-cache"
+export CARGO_HOME="$cache_root/cargo"
 dist="$cache_root/dist-$version"
 bridge="$source_root/comps/jarhead/claude-sdk-bridge"
 formula="$target_root/Formula/jarhead.rb"
@@ -96,7 +97,7 @@ else
   exit "$release_state_status"
 fi
 
-mkdir -p "$cache_root/npm" "$cache_root/target"
+mkdir -p "$CARGO_HOME" "$cache_root/npm" "$cache_root/target"
 find "$dist" -mindepth 1 -delete 2>/dev/null || true
 mkdir -p "$dist"
 
