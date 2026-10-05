@@ -5,11 +5,11 @@ class Jarhead < Formula
   depends_on "node"
 
   if Hardware::CPU.arm?
-    url "https://github.com/jkassis/homebrew-pub/releases/download/jarhead-dist-v0.1.61/jarhead-darwin-arm64-0.1.61.tar.gz"
-    sha256 "e4f708057e8380c9a94e9db43d30239b296ff09665e00a8c3d7f4dbb460e16b8"
+    url "https://github.com/jkassis/homebrew-pub/releases/download/jarhead-dist-v0.1.107/jarhead-darwin-arm64-0.1.107.tar.gz"
+    sha256 "b9880c908ee945dc56415b06b881d361b714c726602be29926b7dbdbb1b70292"
   else
-    url "https://github.com/jkassis/homebrew-pub/releases/download/jarhead-dist-v0.1.61/jarhead-darwin-amd64-0.1.61.tar.gz"
-    sha256 "cf5f5c9e8790e48547939c93bb21e6336990fc6e33082b80ab5c43ec20867192"
+    url "https://github.com/jkassis/homebrew-pub/releases/download/jarhead-dist-v0.1.107/jarhead-darwin-amd64-0.1.107.tar.gz"
+    sha256 "de1c4054709204f2b9fe4e8aca883aeb26307c74d7d5b183abfa05dd8caf3329"
   end
 
   def install
@@ -18,6 +18,6 @@ class Jarhead < Formula
   end
 
   test do
-    assert_match "jarhead 0.1.61", shell_output("#{bin}/jarhead --version")
+    assert_match "jarhead 0.1.107", shell_output("#{bin}/jarhead --version")
   end
 end
