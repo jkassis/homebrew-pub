@@ -128,8 +128,9 @@ package_target() {
   staging="$(mktemp -d)"
   mkdir -p "$staging/bin" "$staging/libexec/jarhead/claude-sdk-bridge"
   install -m 755 "$cache_root/target/$target/release/jarhead" "$staging/bin/jarhead"
-  cp "$bridge/bridge.mjs" "$bridge/protocol.mjs" "$bridge/package.json" \
-    "$bridge/package-lock.json" "$staging/libexec/jarhead/claude-sdk-bridge/"
+  cp "$bridge/bridge.mjs" "$bridge/canonical-tools.mjs" "$bridge/protocol.mjs" \
+    "$bridge/package.json" "$bridge/package-lock.json" \
+    "$staging/libexec/jarhead/claude-sdk-bridge/"
   cp -R "$bridge/node_modules" "$staging/libexec/jarhead/claude-sdk-bridge/"
   COPYFILE_DISABLE=1 tar -C "$staging" -czf "$archive" bin libexec
   (
@@ -145,6 +146,27 @@ package_target x86_64-apple-darwin amd64 &
 intel_package_pid=$!
 wait "$arm_package_pid"
 wait "$intel_package_pid"
+
+verify_bridge_archive() {
+  local archive="$1"
+  local bridge_root="libexec/jarhead/claude-sdk-bridge"
+  local required
+  for required in bridge.mjs canonical-tools.mjs protocol.mjs package.json package-lock.json; do
+    tar -tzf "$archive" | grep -Fx "$bridge_root/$required" >/dev/null || {
+      echo "missing required Claude bridge file in $(basename "$archive"): $required" >&2
+      return 1
+    }
+  done
+
+  local extracted
+  extracted="$(mktemp -d)"
+  tar -C "$extracted" -xzf "$archive"
+  node "$extracted/$bridge_root/bridge.mjs" </dev/null
+  find "$extracted" -depth -delete
+}
+
+verify_bridge_archive "$dist/jarhead-darwin-arm64-${version}.tar.gz"
+verify_bridge_archive "$dist/jarhead-darwin-amd64-${version}.tar.gz"
 
 (
   cd "$dist"
