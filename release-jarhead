@@ -173,22 +173,50 @@ verify_bridge_archive "$dist/jarhead-darwin-amd64-${version}.tar.gz"
 verify_builtin_modules_archive() {
   local archive="$1"
   local modules_root="bin/jarhead-modules"
-  local required
-  for required in \
-    modules.lock.json \
-    jarhead.profiles/module.toml \
-    jarhead.profiles/profiles.wasm; do
-    tar -tzf "$archive" | grep -Fx "$modules_root/$required" >/dev/null || {
-      echo "missing required built-in module file in $(basename "$archive"): $required" >&2
-      return 1
-    }
-  done
+  local extracted modules_dir expected actual module_id entrypoint
+  extracted="$(mktemp -d)"
+  tar -C "$extracted" -xzf "$archive"
+  modules_dir="$extracted/$modules_root"
+  test -f "$modules_dir/modules.lock.json" || {
+    echo "missing built-in module lockfile in $(basename "$archive")" >&2
+    find "$extracted" -depth -delete
+    return 1
+  }
 
-  tar -xOf "$archive" "$modules_root/jarhead.profiles/module.toml" \
-    | grep -Fx 'aliases = ["agents", "agent"]' >/dev/null || {
-      echo "built-in profiles module does not provide :agents in $(basename "$archive")" >&2
+  expected="$extracted/expected-modules"
+  actual="$extracted/actual-modules"
+  jq -r '.modules[] | select(.enabled == true) | .id' \
+    "$modules_dir/modules.lock.json" | sort > "$expected"
+  find "$modules_dir" -mindepth 1 -maxdepth 1 -type d -exec basename {} \; \
+    | sort > "$actual"
+  cmp "$expected" "$actual" || {
+    echo "built-in module inventory does not match its lockfile in $(basename "$archive")" >&2
+    find "$extracted" -depth -delete
+    return 1
+  }
+
+  while IFS= read -r module_id; do
+    test -f "$modules_dir/$module_id/module.toml" || {
+      echo "missing manifest for built-in module $module_id in $(basename "$archive")" >&2
+      find "$extracted" -depth -delete
       return 1
     }
+    entrypoint="$(sed -n 's/^entrypoint = "\([^"]*\)"$/\1/p' \
+      "$modules_dir/$module_id/module.toml")"
+    test -n "$entrypoint" && test -f "$modules_dir/$module_id/$entrypoint" || {
+      echo "missing entrypoint for built-in module $module_id in $(basename "$archive")" >&2
+      find "$extracted" -depth -delete
+      return 1
+    }
+  done < "$expected"
+
+  grep -Fx 'aliases = ["agents", "agent"]' \
+    "$modules_dir/jarhead.profiles/module.toml" >/dev/null || {
+      echo "built-in profiles module does not provide :agents in $(basename "$archive")" >&2
+      find "$extracted" -depth -delete
+      return 1
+    }
+  find "$extracted" -depth -delete
 }
 
 verify_builtin_modules_archive "$dist/jarhead-darwin-arm64-${version}.tar.gz"
