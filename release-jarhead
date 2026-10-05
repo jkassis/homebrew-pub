@@ -52,7 +52,7 @@ release_draft_state() {
   return 1
 }
 
-for tool in cargo gh jq node npm ruby shasum tar; do
+for tool in cargo gh jq node npm ruby rustup shasum tar wasm-tools; do
   command -v "$tool" >/dev/null || { echo "missing required tool: $tool" >&2; exit 1; }
 done
 
@@ -105,6 +105,7 @@ mkdir -p "$dist"
   cd "$bridge"
   NPM_CONFIG_CACHE="$cache_root/npm" npm ci --omit=optional
 )
+"$source_root/make" build_builtin_modules release
 
 build_target() {
   local target="$1"
@@ -128,6 +129,7 @@ package_target() {
   staging="$(mktemp -d)"
   mkdir -p "$staging/bin" "$staging/libexec/jarhead/claude-sdk-bridge"
   install -m 755 "$cache_root/target/$target/release/jarhead" "$staging/bin/jarhead"
+  cp -R "$source_root/target/release/jarhead-modules" "$staging/bin/"
   cp "$bridge/bridge.mjs" "$bridge/canonical-tools.mjs" "$bridge/protocol.mjs" \
     "$bridge/package.json" "$bridge/package-lock.json" \
     "$staging/libexec/jarhead/claude-sdk-bridge/"
@@ -167,6 +169,30 @@ verify_bridge_archive() {
 
 verify_bridge_archive "$dist/jarhead-darwin-arm64-${version}.tar.gz"
 verify_bridge_archive "$dist/jarhead-darwin-amd64-${version}.tar.gz"
+
+verify_builtin_modules_archive() {
+  local archive="$1"
+  local modules_root="bin/jarhead-modules"
+  local required
+  for required in \
+    modules.lock.json \
+    jarhead.profiles/module.toml \
+    jarhead.profiles/profiles.wasm; do
+    tar -tzf "$archive" | grep -Fx "$modules_root/$required" >/dev/null || {
+      echo "missing required built-in module file in $(basename "$archive"): $required" >&2
+      return 1
+    }
+  done
+
+  tar -xOf "$archive" "$modules_root/jarhead.profiles/module.toml" \
+    | grep -Fx 'aliases = ["agents", "agent"]' >/dev/null || {
+      echo "built-in profiles module does not provide :agents in $(basename "$archive")" >&2
+      return 1
+    }
+}
+
+verify_builtin_modules_archive "$dist/jarhead-darwin-arm64-${version}.tar.gz"
+verify_builtin_modules_archive "$dist/jarhead-darwin-amd64-${version}.tar.gz"
 
 (
   cd "$dist"
@@ -211,6 +237,9 @@ case "$host_arch" in
 esac
 tar -C "$install_root" -xzf "$host_archive"
 test "$("$install_root/bin/jarhead" --version)" = "jarhead $version"
+test -f "$install_root/bin/jarhead-modules/modules.lock.json"
+grep -Fx 'aliases = ["agents", "agent"]' \
+  "$install_root/bin/jarhead-modules/jarhead.profiles/module.toml" >/dev/null
 find "$install_root" -depth -delete
 
 retry gh release edit "$public_tag" --repo "$public_repo" --draft=false
