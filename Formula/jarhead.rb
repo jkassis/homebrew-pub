@@ -1,6 +1,7 @@
 class Jarhead < Formula
   desc "Terminal frontend for native Codex, Claude, and JarAgent runtimes"
   homepage "https://github.com/jkassis/jarhead"
+  revision 1
   depends_on :macos
   depends_on "node"
 
@@ -14,10 +15,13 @@ class Jarhead < Formula
 
   def install
     bin.install "bin/jarhead"
+    prefix.install "bin/jarhead-modules"
     libexec.install "libexec/jarhead"
   end
 
   test do
     assert_match "jarhead 0.1.119", shell_output("#{bin}/jarhead --version")
+    assert_path_exists prefix/"jarhead-modules/modules.lock.json"
+    assert_match 'aliases = ["agents", "agent"]', (prefix/"jarhead-modules/jarhead.profiles/module.toml").read
   end
 end

@@ -21,11 +21,14 @@ text = <<~RUBY
 
     def install
       bin.install "bin/jarhead"
+      prefix.install "bin/jarhead-modules"
       libexec.install "libexec/jarhead"
     end
 
     test do
       assert_match "jarhead #{version}", shell_output("\#{bin}/jarhead --version")
+      assert_path_exists prefix/"jarhead-modules/modules.lock.json"
+      assert_match 'aliases = ["agents", "agent"]', (prefix/"jarhead-modules/jarhead.profiles/module.toml").read
     end
   end
 RUBY
