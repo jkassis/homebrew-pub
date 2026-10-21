@@ -52,7 +52,7 @@ release_draft_state() {
   return 1
 }
 
-for tool in cargo gh jq node npm ruby rustup shasum tar wasm-tools; do
+for tool in cargo gh jq node npm ruby rustup shasum tar wasm-tools wasm-bindgen; do
   command -v "$tool" >/dev/null || { echo "missing required tool: $tool" >&2; exit 1; }
 done
 
@@ -106,12 +106,13 @@ mkdir -p "$dist"
   NPM_CONFIG_CACHE="$cache_root/npm" npm ci --omit=optional
 )
 "$source_root/make" build_builtin_modules release
+"$source_root/make" gas_assets
 
 build_target() {
   local target="$1"
   CARGO_TARGET_DIR="$cache_root/target" \
     cargo build --manifest-path "$source_root/Cargo.toml" \
-      --locked --release -p jarhead --target "$target"
+      --locked --release -p jarhead --bin jarhead --bin jarhead-preview-worker --bin jarhead-opencode-control-bridge --target "$target"
 }
 
 build_target aarch64-apple-darwin &
@@ -129,6 +130,9 @@ package_target() {
   staging="$(mktemp -d)"
   mkdir -p "$staging/bin" "$staging/libexec/jarhead/claude-sdk-bridge"
   install -m 755 "$cache_root/target/$target/release/jarhead" "$staging/bin/jarhead"
+  install -m 755 "$cache_root/target/$target/release/jarhead-preview-worker" "$staging/bin/jarhead-preview-worker"
+  install -m 755 "$cache_root/target/$target/release/jarhead-opencode-control-bridge" "$staging/bin/jarhead-opencode-control-bridge"
+  cp -R "$source_root/target/gas-browser" "$staging/libexec/jarhead/"
   cp -R "$source_root/target/release/jarhead-modules" "$staging/bin/"
   cp "$bridge/bridge.mjs" "$bridge/canonical-tools.mjs" "$bridge/protocol.mjs" \
     "$bridge/package.json" "$bridge/package-lock.json" \
@@ -177,6 +181,15 @@ verify_builtin_modules_archive() {
   extracted="$(mktemp -d)"
   tar -C "$extracted" -xzf "$archive"
   modules_dir="$extracted/$modules_root"
+  test -x "$extracted/bin/jarhead-opencode-control-bridge"
+  for asset in gas-browser.js gas-browser_bg.wasm gas-font.ttf; do
+    test -s "$extracted/libexec/jarhead/gas-browser/$asset"
+  done
+  test -x "$extracted/bin/jarhead-preview-worker" || {
+    echo "missing executable preview worker in $(basename "$archive")" >&2
+    find "$extracted" -depth -delete
+    return 1
+  }
   test -f "$modules_dir/modules.lock.json" || {
     echo "missing built-in module lockfile in $(basename "$archive")" >&2
     find "$extracted" -depth -delete
@@ -265,6 +278,13 @@ case "$host_arch" in
 esac
 tar -C "$install_root" -xzf "$host_archive"
 test "$("$install_root/bin/jarhead" --version)" = "jarhead $version"
+printf '{"jsonrpc":"2.0","id":1,"method":"initialize"}\n' \
+  | "$install_root/bin/jarhead-opencode-control-bridge" --address 127.0.0.1:1 --token smoke \
+  | jq -e '.result.serverInfo.name == "jarhead-canonical-controls"' >/dev/null
+test -x "$install_root/bin/jarhead-preview-worker"
+printf '{"type":"read","path":"%s/missing-receipt.json"}' "$install_root" \
+  | "$install_root/bin/jarhead-preview-worker" --receipt-io \
+  | jq -e 'has("Ok") and .Ok == null' >/dev/null
 test -f "$install_root/bin/jarhead-modules/modules.lock.json"
 grep -Fx 'aliases = ["agents", "agent"]' \
   "$install_root/bin/jarhead-modules/jarhead.profiles/module.toml" >/dev/null

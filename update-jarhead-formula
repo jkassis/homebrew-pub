@@ -20,13 +20,21 @@ text = <<~RUBY
     end
 
     def install
-      bin.install "bin/jarhead"
+      bin.install "bin/jarhead", "bin/jarhead-preview-worker", "bin/jarhead-opencode-control-bridge"
       prefix.install "bin/jarhead-modules"
       libexec.install "libexec/jarhead"
     end
 
     test do
       assert_match "jarhead #{version}", shell_output("\#{bin}/jarhead --version")
+      assert_predicate bin/"jarhead-opencode-control-bridge", :executable?
+      bridge = pipe_output("\#{bin}/jarhead-opencode-control-bridge --address 127.0.0.1:1 --token smoke", '{"jsonrpc":"2.0","id":1,"method":"initialize"}')
+      assert_match "jarhead-canonical-controls", bridge
+      %w[gas-browser.js gas-browser_bg.wasm gas-font.ttf].each do |asset|
+        assert_path_exists libexec/"jarhead/gas-browser"/asset
+      end
+      assert_predicate bin/"jarhead-preview-worker", :executable?
+      assert_equal '{"Ok":null}', pipe_output("\#{bin}/jarhead-preview-worker --receipt-io", '{"type":"read","path":"' + (testpath/"missing-receipt.json").to_s + '"}')
       assert_path_exists prefix/"jarhead-modules/modules.lock.json"
       assert_match 'aliases = ["agents", "agent"]', (prefix/"jarhead-modules/jarhead.profiles/module.toml").read
     end
