@@ -5,11 +5,11 @@ class Jarhead < Formula
   depends_on "node"
 
   if Hardware::CPU.arm?
-    url "https://github.com/jkassis/homebrew-pub/releases/download/jarhead-dist-v0.1.122/jarhead-darwin-arm64-0.1.122.tar.gz"
-    sha256 "7da558339ef60e0daf4a61b84714f72db1681e41b1279df84f6925c33d15da30"
+    url "https://github.com/jkassis/homebrew-pub/releases/download/jarhead-dist-v0.1.124/jarhead-darwin-arm64-0.1.124.tar.gz"
+    sha256 "60dc2bd3c618644705678e2c5fe2dd294b702fa3d1307c2f3111b409f4b408fa"
   else
-    url "https://github.com/jkassis/homebrew-pub/releases/download/jarhead-dist-v0.1.122/jarhead-darwin-amd64-0.1.122.tar.gz"
-    sha256 "b27bc0866488d68c8d699c947da6aaea78dc586c9289c8cf2ce60d325f312845"
+    url "https://github.com/jkassis/homebrew-pub/releases/download/jarhead-dist-v0.1.124/jarhead-darwin-amd64-0.1.124.tar.gz"
+    sha256 "b939b2a1a455b346821c0302499cf9f8d063a5c54aa9fcfd34191d998454e3f6"
   end
 
   def install
@@ -19,7 +19,7 @@ class Jarhead < Formula
   end
 
   test do
-    assert_match "jarhead 0.1.122", shell_output("#{bin}/jarhead --version")
+    assert_match "jarhead 0.1.124", shell_output("#{bin}/jarhead --version")
     assert_predicate bin/"jarhead-opencode-control-bridge", :executable?
     bridge = pipe_output("#{bin}/jarhead-opencode-control-bridge --address 127.0.0.1:1 --token smoke", '{"jsonrpc":"2.0","id":1,"method":"initialize"}')
     assert_match "jarhead-canonical-controls", bridge
@@ -28,6 +28,14 @@ class Jarhead < Formula
     end
     assert_predicate bin/"jarhead-preview-worker", :executable?
     assert_equal '{"Ok":null}', pipe_output("#{bin}/jarhead-preview-worker --receipt-io", '{"type":"read","path":"' + (testpath/"missing-receipt.json").to_s + '"}')
+    job = {
+      provider_scope: {lock_root: testpath.to_s}, layout: nil,
+      identity: {room_id: "smoke", workspace_id: "smoke", relative_path: "README.md", source_revision: 1},
+      source: {type: "buffer", text: "# Homebrew preview"}, provider: nil,
+      document_kind: "text/markdown", extension: "md", parse_options: "", immediate: true
+    }
+    probe = pipe_output("#{HOMEBREW_PREFIX}/bin/jarhead-preview-worker", JSON.generate(job) + 10.chr + "null" + 10.chr)
+    assert_equal "jarhead.preview-markdown", JSON.parse(probe.lines.first).fetch("Ok").fetch("provider").fetch("module_id")
     assert_path_exists prefix/"jarhead-modules/modules.lock.json"
     assert_match 'aliases = ["agents", "agent"]', (prefix/"jarhead-modules/jarhead.profiles/module.toml").read
   end
