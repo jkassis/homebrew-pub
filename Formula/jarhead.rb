@@ -5,11 +5,11 @@ class Jarhead < Formula
   depends_on "node"
 
   if Hardware::CPU.arm?
-    url "https://github.com/jkassis/homebrew-pub/releases/download/jarhead-dist-v0.1.120/jarhead-darwin-arm64-0.1.120.tar.gz"
-    sha256 "6b6afc487b7577ccbaa88d670f7d7e7d67aaaf06c2fea788e7d1ae911b4fab07"
+    url "https://github.com/jkassis/homebrew-pub/releases/download/jarhead-dist-v0.1.121/jarhead-darwin-arm64-0.1.121.tar.gz"
+    sha256 "35b5cbe771a64543bc5c4330fdd4286e5871689b1d5eca93b9cc374ea1e5be22"
   else
-    url "https://github.com/jkassis/homebrew-pub/releases/download/jarhead-dist-v0.1.120/jarhead-darwin-amd64-0.1.120.tar.gz"
-    sha256 "b3c7160cf293a5c65443628493086ce7b49d082b7a337efe3578ad017d4f3dcf"
+    url "https://github.com/jkassis/homebrew-pub/releases/download/jarhead-dist-v0.1.121/jarhead-darwin-amd64-0.1.121.tar.gz"
+    sha256 "0f409f5b83222e8ddd1196cc65dd6fcc6bb60264b7984ea55be6596532bf4728"
   end
 
   def install
@@ -19,7 +19,7 @@ class Jarhead < Formula
   end
 
   test do
-    assert_match "jarhead 0.1.120", shell_output("#{bin}/jarhead --version")
+    assert_match "jarhead 0.1.121", shell_output("#{bin}/jarhead --version")
     assert_path_exists prefix/"jarhead-modules/modules.lock.json"
     assert_match 'aliases = ["agents", "agent"]', (prefix/"jarhead-modules/jarhead.profiles/module.toml").read
   end
