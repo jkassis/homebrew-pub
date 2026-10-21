@@ -35,6 +35,14 @@ text = <<~RUBY
       end
       assert_predicate bin/"jarhead-preview-worker", :executable?
       assert_equal '{"Ok":null}', pipe_output("\#{bin}/jarhead-preview-worker --receipt-io", '{"type":"read","path":"' + (testpath/"missing-receipt.json").to_s + '"}')
+      job = {
+        provider_scope: {lock_root: testpath.to_s}, layout: nil,
+        identity: {room_id: "smoke", workspace_id: "smoke", relative_path: "README.md", source_revision: 1},
+        source: {type: "buffer", text: "# Homebrew preview"}, provider: nil,
+        document_kind: "text/markdown", extension: "md", parse_options: "", immediate: true
+      }
+      probe = pipe_output("\#{HOMEBREW_PREFIX}/bin/jarhead-preview-worker", JSON.generate(job) + 10.chr + "null" + 10.chr)
+      assert_equal "jarhead.preview-markdown", JSON.parse(probe.lines.first).fetch("Ok").fetch("provider").fetch("module_id")
       assert_path_exists prefix/"jarhead-modules/modules.lock.json"
       assert_match 'aliases = ["agents", "agent"]', (prefix/"jarhead-modules/jarhead.profiles/module.toml").read
     end
