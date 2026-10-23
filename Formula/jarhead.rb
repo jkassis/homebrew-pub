@@ -5,11 +5,11 @@ class Jarhead < Formula
   depends_on "node"
 
   if Hardware::CPU.arm?
-    url "https://github.com/jkassis/homebrew-pub/releases/download/jarhead-dist-v0.1.130/jarhead-darwin-arm64-0.1.130.tar.gz"
-    sha256 "4509e8845c7201125f9cf35b086906500028a20843ff0ac25c0e9d10edf25a2d"
+    url "https://github.com/jkassis/homebrew-pub/releases/download/jarhead-dist-v0.1.131/jarhead-darwin-arm64-0.1.131.tar.gz"
+    sha256 "dc786fa8e42e486bfc10a8a43b8258c5ef3d4c12126b09be307d8d37c5e4d26b"
   else
-    url "https://github.com/jkassis/homebrew-pub/releases/download/jarhead-dist-v0.1.130/jarhead-darwin-amd64-0.1.130.tar.gz"
-    sha256 "1a702a1a366b9451f5b883a316e8769c888e4e3d2ef98e80475bde81bcfa5a9c"
+    url "https://github.com/jkassis/homebrew-pub/releases/download/jarhead-dist-v0.1.131/jarhead-darwin-amd64-0.1.131.tar.gz"
+    sha256 "7be71feee02097091180300fe3c2c836f1c9a31f4b2347eb3ca87724441c4066"
   end
 
   def install
@@ -19,7 +19,7 @@ class Jarhead < Formula
   end
 
   test do
-    assert_match "jarhead 0.1.130", shell_output("#{bin}/jarhead --version")
+    assert_match "jarhead 0.1.131", shell_output("#{bin}/jarhead --version")
     assert_predicate bin/"jarhead-opencode-control-bridge", :executable?
     bridge = pipe_output("#{bin}/jarhead-opencode-control-bridge --address 127.0.0.1:1 --token smoke", '{"jsonrpc":"2.0","id":1,"method":"initialize"}')
     assert_match "jarhead-canonical-controls", bridge
